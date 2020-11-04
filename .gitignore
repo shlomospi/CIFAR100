@@ -1,2 +1,10 @@
-log
-__pycache__
+log/
+__pycache__/
+meta
+test
+train
+data/
+image/
+saved_model_coarse/
+confusion_matrix_plot
+training_plot

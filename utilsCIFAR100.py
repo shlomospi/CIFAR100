@@ -155,7 +155,7 @@ def standardize(x, tilting=0, normalization=1):
     return (x-tilting) / normalization
 
 
-def plot_acc_lss(history_log):
+def plot_acc_lss(history_log, log_dir=None):
 
     import matplotlib.pyplot as plt
     # list all data in history
@@ -179,8 +179,23 @@ def plot_acc_lss(history_log):
     plt.legend(['train', 'validation'], loc='upper left')
     plt.grid(b=True, which='Both', axis='both')
 
+    if log_dir is None:
+        while True:
+            given_dir = input("To save training plot, provide dir location. leave empty to skip")
+            if given_dir == "":
+                break
+            else:
+                try:
+                    plt.savefig('{}/training_plots.png'.format(given_dir))
+                except ValueError:
+                    print("could not save in provided dir: {}".format(given_dir))
+                    continue
+                else:
+                    break
+    else:
+        plt.savefig('{}/training_plots.png'.format(log_dir))
+
     plt.show()
-    plt.savefig('training_plot.png')
 
 
 def horizontal_flip_and_show(data, labels, verbose=1):
@@ -206,10 +221,11 @@ def horizontal_flip_and_show(data, labels, verbose=1):
         plt.imshow(fliped_data[rand, :, :, :])
         plt.axis('off')
         plt.show()
+
     return tf.concat([data, fliped_data], 0), tf.concat([labels, labels], 0)
 
 
-def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'):
+def plot_confusion_matrix(cm, classes, log_dir=None, normalize=False, title='Confusion matrix'):
     """
     from deeplizard
     This function prints and plots the confusion matrix.
@@ -238,5 +254,21 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+
+    if log_dir is None:
+        while True:
+            given_dir = input("To save confusion matrix, provide dir location. leave empty to skip")
+            if given_dir == "":
+                break
+            else:
+                try:
+                    plt.savefig('{}/confusion_matrix_plot.png'.format(given_dir))
+                except ValueError:
+                    print("could not save in provided dir: {}".format(given_dir))
+                    continue
+                else:
+                    break
+    else:
+        plt.savefig('{}/confusion_matrix_plot.png'.format(log_dir))
+
     plt.show()
-    plt.savefig('confusion_matrix_plot.png')
